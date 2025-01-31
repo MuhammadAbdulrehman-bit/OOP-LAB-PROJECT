@@ -23,6 +23,8 @@ The system uses a **Graphical User Interface (GUI)** built with **Swing**, which
 - **Deposit**: Users can deposit funds into their accounts.
 - **Withdraw**: Users can withdraw funds from their accounts.
 - **Check Balance**: Users can check their account balance at any time.
+- **Create Row**: The application is connected to a database for storing account information and transaction history.
+- **Delete Row**: The application is connected to a database for storing account information and transaction history.
 - **Database Integration**: The application is connected to a database for storing account information and transaction history.
   
 ## Installation
@@ -33,6 +35,7 @@ Before you begin, ensure that you have met the following requirements:
 
 - **Java Development Kit (JDK) 21** or higher is installed on your machine.
 - **IntelliJ IDEA** or another Java IDE is installed for development.
+- **MySQL** For database
 
 ### Steps to Install
 
@@ -83,6 +86,22 @@ We welcome contributions from the community! Here are some ways you can contribu
 - **Bug Reports**: If you find any bugs or issues, please create a new issue in the GitHub issues section.
 - **Feature Requests**: If you have any ideas for new features or improvements, feel free to open a feature request.
 - **Pull Requests**: You can fork the repository, make changes, and submit a pull request. We will review and merge it.
+
+
+## Images
+
+![Client Login](https://github.com/user-attachments/assets/4c3c2eaa-1e9a-4b77-b650-de61400dfa38)
+
+
+![Client Dashboard](https://github.com/user-attachments/assets/4945a787-f8ab-48c8-8eff-44d0b85a19fd)
+
+
+![Admin Login](https://github.com/user-attachments/assets/b4ca703b-1b3e-4469-be71-79cd94f3c340)
+
+
+![Admin Dashboard](https://github.com/user-attachments/assets/d632e9db-b879-4086-950e-d0ed2f0c535f)
+
+
 
 ## License
 
