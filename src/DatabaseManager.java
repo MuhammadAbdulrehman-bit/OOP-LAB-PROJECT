@@ -13,7 +13,6 @@ public class DatabaseManager {
     public DatabaseManager() {
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            connection.setAutoCommit(false);
         } catch (SQLException e) {
             System.out.println("Error connecting to the database: " + e.getMessage());
         }
@@ -200,28 +199,20 @@ public class DatabaseManager {
         }
     }
 
-    public boolean commitTransaction() {
-        try {
-            if (connection != null) {
-                connection.commit();
-                return true;
-            }
-        } catch (SQLException e) {
-            System.out.println("Error committing the transaction: " + e.getMessage());
-        }
-        return false;
-    }
+   public boolean createRow(String Pin, int accountNumber, double balance, String Name){
+        String createRowQuery = "INSERT INTO account(Pin, AccountNumber, Balance, Name) VALUES (? , ? , ? ,? )";
+        try(PreparedStatement pstmt = connection.prepareStatement(createRowQuery)){
+            pstmt.setString(1,Pin);
+            pstmt.setInt(2,accountNumber);
+            pstmt.setDouble(3,balance);
+            pstmt.setString(4,Name);
 
-    public boolean rollbackTransaction() {
-        try {
-            if (connection != null) {
-                connection.rollback();
-                System.out.println("Transaction rolled back successfully.");
-                return true;
-            }
-        } catch (SQLException e) {
-            System.out.println("Error rolling back the transaction: " + e.getMessage());
+           int rowsAffected =  pstmt.executeUpdate();
+            return rowsAffected>0 ;
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
         }
-    return false;
+   return false;
     }
 }

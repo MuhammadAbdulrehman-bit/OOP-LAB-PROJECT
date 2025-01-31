@@ -2,9 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-
-
+import java.sql.SQLException;
 
 
 class AdminBankGUI extends JFrame {
@@ -67,14 +65,14 @@ class AdminBankGUI extends JFrame {
         JButton deleteRow = new JButton("Delete Record");
         deleteRow.setPreferredSize(new Dimension(250, 60));
         deleteRow.setBackground(new Color(36, 63, 135));
+        deleteRow.setForeground(Color.WHITE);
+        deleteRow.setFont(new Font("Times New Roman", Font.BOLD, 22));
 
-        JButton rollBack = new JButton("Reload");
-        rollBack.setPreferredSize(new Dimension(250, 60));
-        rollBack.setBackground(new Color(36, 63, 135));
-
-        JButton commit = new JButton("Commit");
-        rollBack.setPreferredSize(new Dimension(250, 60));
-        rollBack.setBackground(new Color(36, 63, 135));
+        JButton createRow = new JButton("Create Row");
+        createRow.setPreferredSize(new Dimension(250, 60));
+        createRow.setBackground(new Color(36, 63, 135));
+        createRow.setForeground(Color.WHITE);
+        createRow.setFont(new Font("Times New Roman", Font.BOLD, 22));
 
         deleteRow.addActionListener(new ActionListener() {
             @Override
@@ -119,43 +117,112 @@ class AdminBankGUI extends JFrame {
             }
         });
 
-        rollBack.addActionListener(new ActionListener() {
+        createRow.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DatabaseManager myDb = new DatabaseManager();
-                boolean success = myDb.rollbackTransaction();
-                    if(success){
-                        JOptionPane.showMessageDialog(null, "Rolled Back Successs");
+                JFrame createFrame = new JFrame();
+                createFrame.setVisible(true);
+                createFrame.setSize(450,600);
+                createFrame.setLayout(new BorderLayout());
+                createFrame.setTitle("Create Row");
+
+                JPanel createPanel = new JPanel();
+                createPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+                createPanel.setBackground(Color.LIGHT_GRAY);
+
+                JLabel crPin = new JLabel("Pin");
+                crPin.setFont(new Font("Times New Roman", Font.BOLD, 18));
+                JTextField crPinTxt = new JTextField();
+                crPinTxt.setPreferredSize(new Dimension(400,30));
+
+                JLabel craccountNumber = new JLabel("Account Number");
+                craccountNumber.setFont(new Font("Times New Roman", Font.BOLD, 18));
+                JTextField craccountNumberTxt = new JTextField();
+                craccountNumberTxt.setPreferredSize(new Dimension(400,30));
+
+                JLabel crbalance = new JLabel("Balance");
+                crbalance.setFont(new Font("Times New Roman", Font.BOLD, 18));
+                JTextField crbalanceTxt = new JTextField();
+                crbalanceTxt.setPreferredSize(new Dimension(400,30));
+
+                JLabel crName = new JLabel("Name");
+                crName.setFont(new Font("Times New Roman", Font.BOLD, 18));
+                JTextField crNameTxt = new JTextField();
+                crNameTxt.setPreferredSize(new Dimension(400,30));
+
+
+                createPanel.add(crPin);
+                createPanel.add(crPinTxt);
+                createPanel.add(craccountNumber);
+                createPanel.add(craccountNumberTxt);
+                createPanel.add(crbalance);
+                createPanel.add(crbalanceTxt);
+                createPanel.add(crName);
+                createPanel.add(crNameTxt);
+
+                createFrame.add(createPanel, BorderLayout.CENTER);
+
+
+                JButton confirmButton = new JButton("Confirm");
+                confirmButton.setPreferredSize(new Dimension(80,40));
+
+                JButton cancelButton = new JButton("Cancel");
+                cancelButton.setPreferredSize(new Dimension(80,40));
+
+                confirmButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        DatabaseManager myDb = null;
+                        try {
+
+                            String pin = crPinTxt.getText();
+                            int accountNumber = Integer.parseInt(craccountNumberTxt.getText());
+                            double balance = Double.parseDouble(crbalanceTxt.getText());
+                            String name = crNameTxt.getText();
+
+                            myDb = new DatabaseManager();
+
+
+                            if (crPinTxt.getText().isEmpty() || craccountNumberTxt.getText().isEmpty() ||
+                                    crbalanceTxt.getText().isEmpty() || crNameTxt.getText().isEmpty()) {
+                                JOptionPane.showMessageDialog(null, "All fields must be filled!");
+                                return;
+                            }
+
+                            if (myDb.createRow(pin, accountNumber, balance, name)) {
+                                JOptionPane.showMessageDialog(null, "Rows inserted success");
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(null, "Rows not inserted due to Error");
+                            }
+
+                        }
+
+                        catch(Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
                     }
-                else{
-                    JOptionPane.showMessageDialog(null, "Error in roll back");
-                }
+                });
+
+                cancelButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        createFrame.dispose();
+                    }
+                });
+
+                createPanel.add(confirmButton);
+                createPanel.add(cancelButton);
+
             }
         });
-
-        commit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DatabaseManager myDb = new DatabaseManager();
-                boolean success = myDb.commitTransaction();
-                if(success){
-                    JOptionPane.showMessageDialog(null, "Commited Back Successs");
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Error in commit");
-                }
-            }
-        });
-
 
         buttonContainer.add(deleteRow);
-        buttonContainer.add(commit);
-        buttonContainer.add(rollBack);
-
+        buttonContainer.add(createRow);
+        buttonContainer.setOpaque(false);
 
         welcomePanel.add(headerPanel);
         welcomePanel.add(buttonContainer);
-        add(welcomePanel);
 
     }
 

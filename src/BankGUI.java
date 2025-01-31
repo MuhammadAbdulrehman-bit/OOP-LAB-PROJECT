@@ -491,8 +491,6 @@ class BankGUI extends JFrame {
         welcomePanel.add(Box.createVerticalStrut(50));
         welcomePanel.add(container2);
 
-        add(welcomePanel);
-
     }
 
     public static void main(String[] args) {
